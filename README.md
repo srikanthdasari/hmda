@@ -1,1 +1,1 @@
-Detials will come soon
+Details will come soon
