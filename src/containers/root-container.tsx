@@ -1,28 +1,32 @@
 import * as React from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from 'redux';
-import { getRootDataSelector, getRootObject } from '../selector';
-import IStoreState, { IDataSetStoreState } from '../store/IStoreState';
-import { getLoadDataSet as getLoadDataSetAction } from './../actions/load-dataset';
-import HeaderBar from './../components/header-bar';
+import { getLoadDataSet as getLoadDataSetAction } from '../actions/load-dataset';
+import HeaderBar from '../components/header-bar';
+import ActionTypeKeys from '../constants/actiontypekeys';
+import { getSlices } from '../selector';
+import IStoreState from '../store/IStoreState';
 
-
-interface IRootProps {
-    rootDataSet: IDataSetStoreState;
+interface IStateProps {
+    data: IStoreState;
+}
+interface IRootProps{
     getLoadDataSet: () => (
         dispatch : Dispatch<IStoreState>    
     ) => Promise<void>;
 }
+interface IProps extends IStateProps, IRootProps{
 
-class RootContainer extends React.Component<IRootProps>{
+}
+class RootContainer extends React.Component<IProps, {}>{
 
-    constructor(props:IRootProps){
-        super(props);
+    constructor(props:IProps){
+        super(props);        
     }
 
     public componentDidMount() {
         this.props.getLoadDataSet();
-        getRootDataSelector(this.props.rootDataSet);
+        // getRootDataSelector(this.props.rootDataSet);
     }
 
     public render() {
@@ -32,10 +36,10 @@ class RootContainer extends React.Component<IRootProps>{
     }
 }
 
-function mapStateToProps(state:IStoreState){
+function mapStateToProps(state:any){
     return {
-        rootDataSet:getRootObject(state)
-    }
+        data: state.rootDataset.stage === ActionTypeKeys.LOAD_DATASET_SUCCESS? getSlices(state) : null
+    };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IStoreState>) {

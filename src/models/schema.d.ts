@@ -299,7 +299,7 @@
         href: string;
     }
 
-    export interface RootObject {
+    export interface IRootObject {
         _embedded: Embedded;
         _links: Link3[];
         swagger_description: string;
@@ -310,3 +310,4 @@
     }
 
 
+    

@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 import ActionTypeKeys from "../constants/actiontypekeys";
 import { fetchDataSet } from "../fetch-calls/dataset-api";
-import { RootObject } from "../models/schema";
+import { IRootObject } from "../models/schema";
 import IStoreState from "../store/IStoreState";
 
 export interface ILoadDataSetAction {
@@ -9,12 +9,12 @@ export interface ILoadDataSetAction {
 }
 
 export interface ILoadDataSetInProgressAction {
-    readonly type:ActionTypeKeys.LOAD_DATASET_INPROGRESS;
+    readonly type:ActionTypeKeys.LOAD_DATASET_INPROGRESS;    
 }
 
 export interface ILoadDataSetSuccessAction {
     readonly type: ActionTypeKeys.LOAD_DATASET_SUCCESS;
-    readonly data : RootObject; 
+    readonly data : IRootObject; 
 }
 
 export interface ILoadDataSetErrorAction {
@@ -26,7 +26,7 @@ export interface ILoadDataSetErrorAction {
 export function getLoadDataSet() :(dispatch: Dispatch<IStoreState>) => Promise<void> 
 {
     return async (dispatch : Dispatch<IStoreState>) => {        
-            await dispatch<any>(loadDataset())        
+            await dispatch<any>(loadDataset())
     };
 }
 
@@ -36,7 +36,7 @@ function loadDataset(): (dispatch: Dispatch<IStoreState>) => Promise<void> {
         dispatch(onProgress());
 
         try{
-            const data: RootObject = await fetchDataSet();
+            const data: IRootObject = await fetchDataSet();
 
             dispatch(onSuccess(data));
         }
@@ -52,7 +52,7 @@ function onProgress():ILoadDataSetInProgressAction {
     }
 }
 
-function onSuccess(data:RootObject) : ILoadDataSetSuccessAction {
+function onSuccess(data:IRootObject) : ILoadDataSetSuccessAction {
     return {
         data,
         type:ActionTypeKeys.LOAD_DATASET_SUCCESS        

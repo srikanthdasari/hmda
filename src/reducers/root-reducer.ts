@@ -1,9 +1,9 @@
 import { combineReducers } from "redux";
 import IStoreState from "../store/IStoreState";
-import datasetReducer from "./datasetReducer";
+import rootDataset from "./rootDatasetReducer";
 
 const rootReducer = combineReducers<IStoreState>({
-    datasetReducer    
+    rootDataset    
 });
 
 export default rootReducer;

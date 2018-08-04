@@ -1,9 +1,11 @@
-import { RootObject } from "../models/schema";
+import { IRootObject } from "../models/schema";
 
 export default interface IStoreState {
-    readonly rootDataSet: IDataSetStoreState;   
+    readonly rootDataset: IDataSetStoreState | null;   
+    readonly stage : string | null;
+    readonly erroMessage:string | null;
 };
 
 export interface IDataSetStoreState {
-    fullDataSet:Readonly<RootObject> | null ;    
+    fullDataSet:Readonly<IRootObject> | null ;    
 };

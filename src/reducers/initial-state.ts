@@ -1,9 +1,9 @@
-import IStoreState from './../store/IStoreState';
+import IStoreState from '../store/IStoreState';
 
 const defaultState : IStoreState = {
-    rootDataSet :  {
-        fullDataSet: null
-    }
+    erroMessage: null,
+    rootDataset :  null,
+    stage: null
 };
 
 export default defaultState;    

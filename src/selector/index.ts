@@ -1,29 +1,20 @@
-// import { createSelector } from "reselect";
-// import { Slice } from "../models/schema";
-import IStoreState, { IDataSetStoreState } from "../store/IStoreState";
+// import { get,isObject } from "lodash";
+import * as _ from "lodash";
+import { createSelector } from "reselect";
+import { IRootObject } from "../models/schema";
+const getRootDataSelector = (state:any) => _.get(state,'rootDataset.rootDataset.fullDataSet');
+
+export const getSlices = createSelector(
+    [getRootDataSelector],
+    (state:IRootObject) =>{
+        return _.isObject(state) ? _.get(state,'_embedded.slices') : null; 
+    }
+);
 
 
-export const getRootDataSelector = (data:IDataSetStoreState) => data;
-
-
-export function getRootObject(state:IStoreState) {
-    return state;
-}
-
-// const getSliceRouteSelector = createSelector(
-//     [getRootDataSelector],
-//     (
-//         sliceObj : ReadonlyArray<Slice>
-//     ) => {
-//         const sliceGroups = [...sliceObj];
-        
-//         return sliceGroups.map(slice => {
-
-//             const SliceCollection: SliceRoutePaths[] = [];
-            
-//             SliceCollection.push(new SliceRoutePaths{title:slice.name, routepath:'dummy-path'});
-
-
-//         }) as ReadonlyArray<SliceRoutePaths>;
-//     }
-// );
+export const getConcepts = createSelector(
+    [getRootDataSelector],
+    (state:IRootObject) => {
+        return _.isObject(state) ? _.get(state,'_embedded.concepts') : null;
+    }
+);

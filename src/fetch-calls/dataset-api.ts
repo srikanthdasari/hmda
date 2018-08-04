@@ -1,8 +1,8 @@
 import { EndPoint } from "../constants/endpoints";
-import { RootObject } from "../models/schema";
+import { IRootObject } from "../models/schema";
 import FetchError from "./fetch-error";
 
-export  async function fetchDataSet(): Promise<RootObject> {
+export  async function fetchDataSet(): Promise<IRootObject> {
     const requestUrl = EndPoint.DateSetUrl
     const response =await fetch(requestUrl);
 
