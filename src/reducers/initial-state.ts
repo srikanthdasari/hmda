@@ -1,8 +1,9 @@
 import IStoreState from '../store/IStoreState';
 
 const defaultState : IStoreState = {
-    erroMessage: null,
-    rootDataset :  null,
+    errorObj: null,
+    larObj: null,
+    rootObj :  null,
     stage: null
 };
 

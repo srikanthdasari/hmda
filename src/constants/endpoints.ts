@@ -1,4 +1,4 @@
 export class EndPoint {
-    public static baseUrl: string = "https://api.consumerfinance.gov";
-    public static DateSetUrl = EndPoint.baseUrl + "/data/hmda.json"; 
+    public static BaseUrl: string = "https://api.consumerfinance.gov";
+    public static DateSetUrl = EndPoint.BaseUrl + "/data/hmda.json"; 
 }

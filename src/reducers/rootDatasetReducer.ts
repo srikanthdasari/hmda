@@ -26,21 +26,12 @@ export default function rootDatasetReducer(
     }
 }
 
-
-// function OnLoadDataSet(action: ILoadDataSetAction) {
-//     return {
-//         isFetching : false,
-//         fullDataSet: null,
-//         lastUpdated: null 
-//     }
-// }
-
-
 // TODO : Clean up ..add the Inprogress intrface
 function OnLoadDataSetInProgress(state:IStoreState, action: ILoadDataSetInProgressAction) :IStoreState {
     return {
         ...state,
-        rootDataset: {
+        errorObj:null,
+        rootObj: {
             fullDataSet:null
         },
         stage:action.type,
@@ -51,7 +42,8 @@ function OnLoadDataSetInProgress(state:IStoreState, action: ILoadDataSetInProgre
 function OnLoadDataSetError(state:IStoreState,action: ILoadDataSetErrorAction):IStoreState {
     return {
         ...state,
-        rootDataset: {
+        errorObj:action.data,
+        rootObj: {
             fullDataSet:null
         },
         stage:action.type
@@ -61,7 +53,8 @@ function OnLoadDataSetError(state:IStoreState,action: ILoadDataSetErrorAction):I
 function OnLoadDataSetSuccess(state:IStoreState,action: ILoadDataSetSuccessAction) : IStoreState {
     return {
         ...state,
-        rootDataset: {
+        errorObj:null,
+        rootObj: {
             fullDataSet:action.data
         },
         stage:action.type

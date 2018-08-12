@@ -2,7 +2,7 @@
 import * as _ from "lodash";
 import { createSelector } from "reselect";
 import { IRootObject } from "../models/schema";
-const getRootDataSelector = (state:any) => _.get(state,'rootDataset.rootDataset.fullDataSet');
+const getRootDataSelector = (state:any) => _.get(state,'rootDataset.rootObj.fullDataSet');
 
 export const getSlices = createSelector(
     [getRootDataSelector],
@@ -18,3 +18,10 @@ export const getConcepts = createSelector(
         return _.isObject(state) ? _.get(state,'_embedded.concepts') : null;
     }
 );
+
+export const getFooterMessage = createSelector(
+    [getRootDataSelector],
+    (state:IRootObject) => {
+        return _.isObject(state) ? _.get(state,'description') : null;
+    }
+)

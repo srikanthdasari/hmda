@@ -1,4 +1,4 @@
-import { IconButton, WithStyles } from '@material-ui/core'
+import { IconButton, WithStyles } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import withStyles from '@material-ui/core/styles/withStyles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
