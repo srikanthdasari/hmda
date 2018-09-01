@@ -6,13 +6,12 @@ import Footer from '../components/footer';
 import HeaderBar from '../components/header-bar';
 import PreloaderContianer from '../components/pre-loader-container';
 import ActionTypeKeys from '../constants/actiontypekeys';
-import { Concept, Slice } from '../models/schema';
-import { getConcepts, getFooterMessage, getSlices } from '../selector';
+import { Concept } from '../models/schema';
+import { getConcepts, getFooterMessage } from '../selector';
 import IStoreState from '../store/IStoreState';
 import TabContainer from './tab-container';
 
 interface IStateProps {
-    readonly slices: Slice[];
     readonly concepts : Concept[];
     readonly isInProgress : boolean;
     readonly currentStage :string;
@@ -46,7 +45,7 @@ class RootContainer extends React.Component<IProps, {}>{
                 </header>
                 <div>
                     { this.props.isInProgress === true && <PreloaderContianer /> }
-                    { this.props.currentStage === ActionTypeKeys.LOAD_DATASET_SUCCESS && <TabContainer slices={this.props.slices} />}
+                    { this.props.currentStage === ActionTypeKeys.LOAD_DATASET_SUCCESS && <TabContainer value={0}  />}
                 </div>
                 <Footer message={this.props.footerMessage} />
             </div>
@@ -60,7 +59,6 @@ function mapStateToProps(state:any){
         currentStage : state.rootDataset.stage,
         footerMessage : getFooterMessage(state),
         isInProgress : state.rootDataset.stage === ActionTypeKeys.LOAD_DATASET_INPROGRESS ? true : false,
-        slices:  getSlices(state),        
     };
 }
 

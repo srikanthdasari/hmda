@@ -15,7 +15,7 @@ const styles = (theme:any) => ({
 
 interface ITabContentPlaceholderProps {
     children: {};  // specify children name to use
-    direction : string;
+    direction : string;        
 }
 
 

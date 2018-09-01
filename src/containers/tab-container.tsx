@@ -3,6 +3,7 @@ import AppBar from '@material-ui/core/AppBar';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
+import * as _ from "lodash";
 import * as React from 'react';
 import { connect } from 'react-redux';
 import SwipeableViews from 'react-swipeable-views';
@@ -10,8 +11,9 @@ import compose  from 'recompose/compose';
 import { bindActionCreators, Dispatch } from 'redux';
 import {getLoadLarData as getLoadLarDataAction} from '../actions/load-lar';
 import TabContentPlaceholder from '../components/tab-content-paceholder';
-import { ILarObject } from '../models/lar';
 import { Slice } from '../models/schema';
+import { getSlices } from '../selector';
+import IStoreState from '../store/IStoreState';
 const styles = (theme:any) => ({
     root : {
         backgroundColor: theme.palette.background.paper,
@@ -27,8 +29,11 @@ interface ITabContainertState {
 
 interface ITabContainerProps {
     readonly slices: Slice[];
-    getSliceData: () => (
-        dispatch : Dispatch<ILarObject>    
+    // getSliceData: () => (
+    //     dispatch : Dispatch<IStoreState>    
+    // ) => Promise<void>;
+    getLarData: (endpoint:string)=>(
+        dispatch : Dispatch<IStoreState>
     ) => Promise<void>;
 }
 
@@ -47,7 +52,31 @@ class TabContainer extends React.Component<WithStyles<'root'> & ITabContainerPro
 
     public handleChangeIndex (index:number) {
         this.setState({value:index});
+    }
         
+    public componentDidMount() {
+        // this.props.getSliceData();        
+        // if(_.isObject(this.props.slices) && _.isArray(this.props.slices))
+        // {
+        //     if(this.props.slices.length > 1) {
+        //         const linksObj = this.props.slices[0];
+        //         this.props.getLarData( linksObj.href);
+        //     }
+
+        // }
+
+        const larObj = _.find(this.props.slices, (l)=>{
+            return l.id==="hmda_lar";
+        });
+
+        const link = _.isUndefined(larObj) ? null : _.find(larObj._links, (s) => {
+            return s.rel==="self"
+        });
+
+        if(link !== null && link !== undefined) {
+            const href = _.isObject(link) ? link.href : "";
+            this.props.getLarData(href)
+        }
     }
 
     public render() {
@@ -85,18 +114,19 @@ class TabContainer extends React.Component<WithStyles<'root'> & ITabContainerPro
 
 function mapStateToProps(state:any) { 
     return {
-        data:state.larDataset
+        data:state.larDataset,
+        slices: getSlices(state),
     }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<ILarObject>) {
+function mapDispatchToProps(dispatch: Dispatch<IStoreState>) {
     return {
-        getSliceData:bindActionCreators(getLoadLarDataAction,dispatch)
+        getLarData:bindActionCreators(getLoadLarDataAction,dispatch)
     }
 }
 
 // export default withStyles(styles, { withTheme: true })(TabContainer);
-export default compose(
-    withStyles(styles, { withTheme: true }),
-    connect(mapStateToProps,mapDispatchToProps)
+export default compose<WithStyles<'root'> & ITabContainerProps,ITabContainertState>(
+    withStyles(styles),
+    connect<{},{},{}>(mapStateToProps,mapDispatchToProps)
 )(TabContainer)

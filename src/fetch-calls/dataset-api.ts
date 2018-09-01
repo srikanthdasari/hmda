@@ -15,7 +15,7 @@ export  async function fetchDataSet(): Promise<IRootObject> {
 }
 
 export  async function fetchLarDataSet(endpoint:string): Promise<ILarObject> {
-    const requestUrl = EndPoint.BaseUrl + endpoint;
+    const requestUrl = EndPoint.BaseUrl + endpoint+".json";
     const response =await fetch(requestUrl);
 
     if(response.ok) {
