@@ -2,6 +2,7 @@ import { Dispatch } from "redux";
 import ActionTypeKeys from "../constants/actiontypekeys";
 import {fetchLarDataSet} from "../fetch-calls/dataset-api";
 import {ILarObject} from "../models/lar";
+import { IQuery } from "../models/query";
 import IStoreState from "../store/IStoreState";
 
 
@@ -23,20 +24,18 @@ export interface ILoadLarDataErrorAction {
     readonly data:Error;
 }
 
-
-export function getLoadLarData(endpoint:string) : (dispatch : Dispatch<IStoreState>) => Promise<void>
+export function getLoadLarData(endpoint:string, query:IQuery) : (dispatch : Dispatch<IStoreState>) => Promise<void>
 {
     return async(dispatch : Dispatch<IStoreState>) => {
-        await dispatch<any>(loadLarData(endpoint));
+        await dispatch<any>(loadLarData(endpoint,query));
     }
 }
 
-
-function loadLarData(endpoint:string):(dispatch: Dispatch<IStoreState>) => Promise<void> {
+function loadLarData(endpoint:string,query:IQuery):(dispatch: Dispatch<IStoreState>) => Promise<void> {
     return async(dispatch: Dispatch<IStoreState>) => {
         dispatch(onProgress());
         try{
-            const data: ILarObject = await fetchLarDataSet(endpoint);
+            const data: ILarObject = await fetchLarDataSet(endpoint,query);
 
             dispatch(onSuccess(data));
         }

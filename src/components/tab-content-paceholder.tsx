@@ -1,41 +1,37 @@
-import { WithStyles } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
-const styles = (theme:any) => ({
-    root : {
-        ...theme.mixins.gutters(),
-        flexGrow: 1,
-        margin:6,
-        paddingBottom: theme.spacing.unit * 2,
-        paddingTop: theme.spacing.unit * 2
-    }
-});
+import {SliceId} from '../constants/sliceId';
+import {Slice} from '../models/schema';
+import LarTab from './lar-tab';
+
+// const styles = (theme:any) => ({
+//     root : {
+//         ...theme.mixins.gutters(),
+//         flexGrow: 1,
+//         margin:6,
+//         paddingBottom: theme.spacing.unit * 2,
+//         paddingTop: theme.spacing.unit * 2
+//     }
+// });
 
 interface ITabContentPlaceholderProps {
-    children: {};  // specify children name to use
+    slice : Slice;
     direction : string;        
+    getData: (endpoint:string)=>void;
 }
 
-
-class TabContentPlaceholder extends React.Component<WithStyles<'root'> & ITabContentPlaceholderProps,{}> {
+class TabContentPlaceholder extends React.Component<ITabContentPlaceholderProps,{}> {
     
-    constructor(props: WithStyles<'root'> & ITabContentPlaceholderProps) {
-        super(props);
+    constructor(props:ITabContentPlaceholderProps) {
+        super(props);        
     }
 
     public render() {
-        return (
-            
-            <Paper className={this.props.classes.root} elevation={1}>
-                 <Typography component="div"  style={{ padding: 8 * 3 }}>
-                    {this.props.children}
-                </Typography>
-            </Paper>
-    
+        return (         
+            <div>
+                { this.props.slice.id === SliceId.larId && <LarTab getLarData={this.props.getData} larObj={this.props.slice}/> }
+            </div>
         );
     }
 }
 
-export default withStyles(styles)(TabContentPlaceholder);
+export default TabContentPlaceholder;

@@ -6,6 +6,13 @@ import {
 } from "../actions/load-dataset";
 
 import { 
+    ILoadGeoDataAction, 
+    ILoadGeoDataErrorAction, 
+    ILoadGeoDataInProgressAction, 
+    ILoadGeoDataSuccessAction 
+} from "../actions/load-geo";
+
+import { 
     ILoadLarDataAction, 
     ILoadLarDataErrorAction, 
     ILoadLarDataInProgressAction, 
@@ -17,6 +24,10 @@ type ActionTypes =
 | ILoadDataSetInProgressAction
 | ILoadDataSetSuccessAction
 | ILoadDataSetErrorAction
+| ILoadGeoDataAction
+| ILoadGeoDataInProgressAction
+| ILoadGeoDataErrorAction
+| ILoadGeoDataSuccessAction
 | ILoadLarDataAction
 | ILoadLarDataInProgressAction
 | ILoadLarDataSuccessAction
