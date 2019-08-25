@@ -8,15 +8,18 @@ import * as React from 'react';
 const theme = createMuiTheme({
     palette: {
         primary: {
-        dark: lightBlue[700],
-        light: lightBlue[300],
-        main: lightBlue[500]        
+            dark: lightBlue[700],
+            light: lightBlue[300],
+            main: lightBlue[500]        
         },
-    secondary: {
-        dark: green[700],
-        light: green[300],
-        main: green[500],        
+        secondary: {
+            dark: green[700],
+            light: green[300],
+            main: green[500],        
         }
+    },
+    typography: {
+        useNextVariants: true,
     }
 });  
 

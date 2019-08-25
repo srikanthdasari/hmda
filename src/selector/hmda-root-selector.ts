@@ -35,6 +35,10 @@ export const getStates = createSelector(
 
         const statesTable = statesConcept!==null && statesConcept!==undefined ? statesConcept.table : null;
 
+        if(!_.isUndefined(statesTable)) {
+            if(!_.isUndefined(statesTable))
+        }
+
         return statesTable!==null && statesTable!==undefined ? statesTable.data :null;
     }
 )

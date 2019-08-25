@@ -8,6 +8,7 @@ const styles:StyleRules<'root'> = ({
         fontSize:11,
         left:0,
         margin:3,
+        maxHeight:20,
         position: 'fixed',
         right:0,
         textAlign:'center',

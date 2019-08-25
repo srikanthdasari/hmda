@@ -2,16 +2,18 @@ import * as _ from "lodash";
 import * as React from 'react';
 import { ConstLink } from '../constants/link';
 import { Slice } from '../models/schema'; 
-interface ILarTab {
+import RootPivot from './pivot-components/root-pivot';
+
+interface ILarTabProps {
     larObj : Slice;
     getLarData: (endpoint:string)=>void;
 }
 
-class LarTab extends React.Component<ILarTab,{}> {
+class LarTab extends React.Component<ILarTabProps,{}> {
 
-    constructor(props: ILarTab){
+    constructor(props: ILarTabProps){
         super(props);
-        
+        this.state = props;
     }
 
     public componentDidMount() {
@@ -29,7 +31,7 @@ class LarTab extends React.Component<ILarTab,{}> {
     public render() {
         return (
             <div>
-                <h1>{this.props.larObj.name}</h1>
+                <RootPivot />
             </div>
         );
     }

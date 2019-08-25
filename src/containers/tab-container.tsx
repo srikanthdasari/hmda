@@ -1,8 +1,9 @@
-import { WithStyles } from '@material-ui/core';
+import { Theme, WithStyles } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
+import * as _ from "lodash";
 import * as React from 'react';
 import { connect } from 'react-redux';
 import SwipeableViews from 'react-swipeable-views';
@@ -15,12 +16,10 @@ import { IQuery, IWhereClause } from '../models/query';
 import { Concept, Slice } from '../models/schema'; 
 import { getConcepts, getSlices } from '../selector/hmda-root-selector';
 import IStoreState from '../store/IStoreState';
-
-const styles = (theme:any) => ({
+const styles = (theme:Theme) => ({
     root : {
         backgroundColor: theme.palette.background.paper,
-        // width: 500,
-        flexGrow: 1,
+        height:'100%'
     }
 });
 
@@ -87,19 +86,21 @@ class TabContainer extends React.Component<WithStyles<'root'> & ITabContainerPro
 
     private getData(endpoint:string) {
 
-        const conditions:IWhereClause[]=[{
-            key:"state_abbr",
-            value:sessionStorage.getItem(SessionStateConstants.SESSION_USSTATE) || ""
-        }];
+        if(!_.isUndefined(endpoint)) {
+            const conditions:IWhereClause[]=[{
+                key:"state_abbr",
+                value:sessionStorage.getItem(SessionStateConstants.SESSION_USSTATE) || ""
+            }];
 
-        const query:IQuery = {
-            orderBy:[],
-            selectFields:[],
-            whereCondition: conditions            
-        };
+            const query:IQuery = {
+                orderBy:[],
+                selectFields:[],
+                whereCondition: conditions            
+            };
 
-        // query.whereCondition.Add("state_abbr",sessionStorage.getItem(SessionStateConstants.SESSION_USSTATE))
-        this.props.getLarData(endpoint, query);
+            // query.whereCondition.Add("state_abbr",sessionStorage.getItem(SessionStateConstants.SESSION_USSTATE))
+            this.props.getLarData(endpoint, query);
+        }
     }
 }
 
@@ -111,7 +112,7 @@ function mapStateToProps(state:any) {
     }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<IStoreState>) {
+function (dispatch: Dispatch<IStoreState>) {
     return {
         getLarData:bindActionCreators(getLoadLarDataAction,dispatch)
     }

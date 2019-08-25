@@ -6,7 +6,7 @@ export class ConceptsId {
     public static fips="fips"; 
     public static preapproval="preapproval";
     public static lienStatus="lien_status"; 
-    public static actionTakenName="action_taken_name";
+    public static actionTakenName="action_taken";
     public static race="race";
     public static msamd="msamd";
     public static ownerOccupancy="owner_occupancy";

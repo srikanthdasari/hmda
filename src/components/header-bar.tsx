@@ -3,7 +3,6 @@ import {
     Chip, 
     Menu, 
     MenuItem, 
-    StyleRulesCallback, 
     Toolbar, 
     Typography, 
     WithStyles
@@ -12,12 +11,13 @@ import AppBar from '@material-ui/core/AppBar';
 import withStyles from '@material-ui/core/styles/withStyles';
 import * as _ from "lodash";
 import * as React from 'react';
+import { Datum } from 'src/models/schema';
 import SessionStateConstants from '../constants/session-state-constants'
+import { MetadataReader } from '../core-lib/MetadataReader';
 import { IGeoObject } from '../models/geo';
-import { Datum } from '../models/schema';
 import MenuDrawer from './menu-drawer';
 
-const styles:StyleRulesCallback<'root'> = () => ({
+const styles={
     flex: {
         flexGrow: 1,
     },
@@ -28,12 +28,12 @@ const styles:StyleRulesCallback<'root'> = () => ({
     root:{
         flexGrow: 1
     },
-});
+};
 
 interface IHeaderBarProps {
+    // stateCodes? : Datum[];
     title:string;
     locationData: IGeoObject;
-    statecodes: Datum[];
 }
 
 interface IHeaderBarState {
@@ -41,10 +41,10 @@ interface IHeaderBarState {
     anchorEl:any;
     stateName:string;
     stateCode:string;
+    stateCodes: Datum[];
 }
 
-type IHeaderPropsWithStyles = IHeaderBarProps & WithStyles<'root'> & WithStyles<'flex'> & WithStyles<'menuButton'>;
-
+type IHeaderPropsWithStyles = IHeaderBarProps & WithStyles<'root' | 'flex' | 'menuButton'>;
 
 class HeaderBar extends React.Component<IHeaderPropsWithStyles, IHeaderBarState> {
 
@@ -54,7 +54,8 @@ class HeaderBar extends React.Component<IHeaderPropsWithStyles, IHeaderBarState>
                         IsOpen:false, 
                         anchorEl:null,
                         stateCode:"",
-                        stateName:""
+                        stateCodes:[],
+                        stateName:"",                        
                     };
         this.onLocationClick = this.onLocationClick.bind(this);
         this.onHandleClose = this.onHandleClose.bind(this);
@@ -66,7 +67,13 @@ class HeaderBar extends React.Component<IHeaderPropsWithStyles, IHeaderBarState>
                 stateCode:_.isObject(this.props.locationData)?this.props.locationData.region_code:"",
                 stateName:_.isObject(this.props.locationData)?this.props.locationData.region_name:"",
             });
-            sessionStorage.setItem(SessionStateConstants.SESSION_USSTATE,_.isObject(this.props.locationData)?this.props.locationData.region_code:"");      
+            localStorage.setItem(SessionStateConstants.SESSION_USSTATE,_.isObject(this.props.locationData)?this.props.locationData.region_code:"");      
+        const metadata = MetadataReader.readMetadata();
+
+        this.setState({
+            stateCodes:metadata.stateCodes.collection
+        })
+
     }
 
     public onLocationClick(e:React.MouseEvent<HTMLDivElement>) {
@@ -83,15 +90,17 @@ class HeaderBar extends React.Component<IHeaderPropsWithStyles, IHeaderBarState>
     public onHandleMenuItemClick(_e:React.MouseEvent<HTMLElement>) {
         if(_.isObject(_e) && _.isObject(_e.currentTarget)) {
             const selectedValue =_.trim(_e.currentTarget.textContent || "").toLowerCase();
-            const mappedValue = _.find(this.props.statecodes,(l)=>{
-                return l.name.toLowerCase() === selectedValue
-            });
-            
-            if(!_.isUndefined(mappedValue))
-            {
-                sessionStorage.setItem(SessionStateConstants.SESSION_USSTATE, mappedValue.abbr);            
-                this.setState({stateCode:mappedValue.abbr, stateName:mappedValue.name})
-            }            
+            if(!_.isUndefined(this.state.stateCodes)) {
+                const mappedValue = _.find(this.state.stateCodes,(l)=>{
+                    return l.name.toLowerCase() === selectedValue
+                });
+                
+                if(!_.isUndefined(mappedValue))
+                {
+                    localStorage.setItem(SessionStateConstants.SESSION_USSTATE, mappedValue.abbr);            
+                    this.setState({stateCode:mappedValue.abbr, stateName:mappedValue.name})
+                }       
+            }     
         }
         this.setState({ anchorEl: null , IsOpen:false});
     }
@@ -102,11 +111,8 @@ class HeaderBar extends React.Component<IHeaderPropsWithStyles, IHeaderBarState>
             <div className={this.props.classes.root}>
                 <AppBar position="static">
                     <Toolbar>
-                        {/* <IconButton  color="inherit" aria-label="Menu">
-                            <MenuIcon />
-                        </IconButton> */}
                         <MenuDrawer />
-                        <Typography variant="title" color="inherit" className={this.props.classes.flex}>
+                        <Typography variant="h6" color="inherit" className={this.props.classes.flex}>
                             {this.props.title}
                         </Typography>
                         <div>
@@ -130,9 +136,11 @@ class HeaderBar extends React.Component<IHeaderPropsWithStyles, IHeaderBarState>
                             onClose={this.onHandleClose}
                             >
                             {
-                                this.props.statecodes!==null && this.props.statecodes!==undefined ? 
-                                                                this.props.statecodes.map(p => <MenuItem id={p.abbr} key={p.abbr} onClick={this.onHandleMenuItemClick} > {p.name} </MenuItem>) 
-                                                                : <MenuItem key="loading">Loading...</MenuItem>
+                            
+                                (this.state.stateCodes!==null && this.state.stateCodes!==undefined) 
+                                ? this.state.stateCodes.map(p => <MenuItem id={p.abbr} key={p.abbr} onClick={this.onHandleMenuItemClick} > {p.name} </MenuItem>) 
+                                : <MenuItem key="loading">Loading...</MenuItem>
+                                
                             }                                   
                             </Menu>
                         </div>
